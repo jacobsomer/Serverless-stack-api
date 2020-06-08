@@ -1,4 +1,5 @@
 service: notes-app-2-api
+
 # Create an optimized package for our functions
 package:
   individually: true
@@ -21,14 +22,12 @@ provider:
   stage: dev
   region: us-east-1
 
-    # These environment variables are made available to our functions
+  # These environment variables are made available to our functions
   # under process.env.
   environment:
     tableName: ${self:custom.tableName}
     stripeSecretKey: ${env:STRIPE_SECRET_KEY}
 
-  # 'iamRoleStatements' defines the permission policy for the Lambda function.
-  # In this case Lambda functions are granted with permissions to access DynamoDB.
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -43,7 +42,6 @@ provider:
       # the specific table for the stage
       Resource:
         - "Fn::GetAtt": [ NotesTable, Arn ]
-
 
 functions:
   # Defines an HTTP API endpoint that calls the main function in create.js
@@ -60,6 +58,7 @@ functions:
           method: post
           cors: true
           authorizer: aws_iam
+
   get:
     # Defines an HTTP API endpoint that calls the main function in get.js
     # - path: url path is /notes/{id}
@@ -71,6 +70,7 @@ functions:
           method: get
           cors: true
           authorizer: aws_iam
+
   list:
     # Defines an HTTP API endpoint that calls the main function in list.js
     # - path: url path is /notes
@@ -82,6 +82,7 @@ functions:
           method: get
           cors: true
           authorizer: aws_iam
+
   update:
     # Defines an HTTP API endpoint that calls the main function in update.js
     # - path: url path is /notes/{id}
@@ -93,6 +94,7 @@ functions:
           method: put
           cors: true
           authorizer: aws_iam
+
   delete:
     # Defines an HTTP API endpoint that calls the main function in delete.js
     # - path: url path is /notes/{id}
@@ -116,7 +118,8 @@ functions:
           method: post
           cors: true
           authorizer: aws_iam
-    # Create our resources with separate CloudFormation templates
+
+# Create our resources with separate CloudFormation templates
 resources:
   # API Gateway Errors
   - ${file(resources/api-gateway-errors.yml)}
